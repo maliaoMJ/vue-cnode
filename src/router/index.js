@@ -12,10 +12,10 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/home"
+      redirect: "/home/all"
     },
     {
-      path:'/home',
+      path:'/home/:type',
       name:'home',
       component:Index
 

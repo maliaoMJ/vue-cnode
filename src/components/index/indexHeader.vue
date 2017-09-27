@@ -1,10 +1,10 @@
 <template>
     <div class="header">
-      <router-link :to="{path:'/home'}" :class="[this.typeName==='all'?'item_active':'','item']" ><span @click="changeType($event,'all')">全部</span></router-link>
-      <router-link :to="{path:'/home'}" :class="[this.typeName==='share'?'item_active':'','item']"><span @click="changeType($event,'share')">分享</span></router-link>
-      <router-link :to="{path:'/home'}" :class="[this.typeName==='ask'?'item_active':'','item']"><span @click="changeType($event,'ask')">问答</span></router-link>
-      <router-link :to="{path:'/home'}" :class="[this.typeName==='job'?'item_active':'','item']"><span @click="changeType($event,'job')">招聘</span></router-link>
-      <router-link :to="{path:'/home'}" :class="[this.typeName==='dev'?'item_active':'','item']"><span @click="changeType($event,'dev')">测试</span></router-link>
+      <router-link :to="{path:'/home/all'}" :class="[this.typeName==='all'?'item_active':'','item']" ><span @click="changeType($event,'all')">全部</span></router-link>
+      <router-link :to="{path:'/home/share'}" :class="[this.typeName==='share'?'item_active':'','item']"><span @click="changeType($event,'share')">分享</span></router-link>
+      <router-link :to="{path:'/home/ask'}" :class="[this.typeName==='ask'?'item_active':'','item']"><span @click="changeType($event,'ask')">问答</span></router-link>
+      <router-link :to="{path:'/home/job'}" :class="[this.typeName==='job'?'item_active':'','item']"><span @click="changeType($event,'job')">招聘</span></router-link>
+      <router-link :to="{path:'/home/dev'}" :class="[this.typeName==='dev'?'item_active':'','item']"><span @click="changeType($event,'dev')">测试</span></router-link>
 
     </div>
 </template>
@@ -21,7 +21,7 @@
         },
         computed:{
           typeName:function(){
-            return this.chapterType
+            return this.$route.params.type
           }
         },
         methods: {
@@ -44,10 +44,10 @@
 
         },
         beforeCreate:function(){
-
+         console.log(this.$route.params.type);
         },
       created:function(){
-        this.getData('all');
+        this.getData(this.$route.params.type);
 
         }
 

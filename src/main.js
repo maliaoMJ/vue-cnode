@@ -6,6 +6,7 @@ import router from './router'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import VueResource from 'vue-resource'
+import 'github-markdown-css'
 Vue.use(VueResource)
 Vue.config.productionTip = false
 Vue.component('icon', Icon)

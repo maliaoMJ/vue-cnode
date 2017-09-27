@@ -1,25 +1,25 @@
 <template>
     <div class="footer ">
-        <router-link :to="{path:'home'}"  :class="[tabName==='home'?'item_active':'','item']">
+        <router-link :to="{path:'/home/all'}"  :class="[tabName==='home'?'item_active':'','item']">
           <div class="index">
            <icon name="home"></icon>
             <p>首页</p>
           </div>
         </router-link>
-      <router-link :to="{path:'send'}" :class="[tabName==='send'?'item_active':'','item']">
+      <router-link :to="{path:'/send'}" :class="[tabName==='send'?'item_active':'','item']">
         <div class="send">
           <icon name="send-o"></icon>
           <p>发表</p>
         </div>
       </router-link>
-      <router-link :to="{path:'message'}" :class="[tabName==='message'?'item_active':'','item']">
+      <router-link :to="{path:'/message'}" :class="[tabName==='message'?'item_active':'','item']">
         <div class="message">
           <icon name="envelope-o"></icon>
 
           <p>消息</p>
         </div>
       </router-link>
-      <router-link :to="{path:'user'}" :class="[tabName==='user'?'item_active':'','item']">
+      <router-link :to="{path:'/user'}" :class="[tabName==='user'?'item_active':'','item']">
         <div class="user">
           <icon name="user-circle-o"></icon>
           <p>我的</p>
