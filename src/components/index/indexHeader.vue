@@ -44,7 +44,7 @@
 
         },
         beforeCreate:function(){
-         console.log(this.$route.params.type);
+//         console.log(this.$route.params.type);
         },
       created:function(){
         this.getData(this.$route.params.type);

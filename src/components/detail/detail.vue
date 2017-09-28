@@ -38,7 +38,7 @@
 
             this.$http.get('https://cnodejs.org/api/v1/topic/'+this.$route.params.chapterId)
                 .then((response)=>{
-                    console.log(response.data.data);
+//                    console.log(response.data.data);
                     this.chapterdata = response.data.data;
                 })
                 .catch((err)=>{

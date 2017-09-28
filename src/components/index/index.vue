@@ -8,11 +8,13 @@
 <script>
     import chapterList from './chapterList.vue'
     import indexHeader from './indexHeader.vue'
+
     export default {
         name: 'index',
         components:{
           chapterList,
-          indexHeader
+          indexHeader,
+     
         },
       computed:{
           result:function(){

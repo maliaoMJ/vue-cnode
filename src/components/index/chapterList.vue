@@ -1,35 +1,46 @@
 <template>
     <div class="list">
-      <div v-for="item in data" class="itemBox">
-        <span v-show="item.top" class="itemtop">置顶</span>
-        <span v-show="item.good" class="essence">精华</span>
-         <div class="top">
-           <div class="imgBox">
-             <router-link :to="{path:'/home'}">
-               <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
-             </router-link>
-           </div>
-           <div class="infoBox">
-             <p class="author">{{item.author.loginname}}</p>
-             <p class="activeInfo"><span class="activeTime">1分钟前</span><span class="type">#{{item.tab}}#</span></p>
-           </div>
-         </div>
-         <router-link class="href" :to="{path:'/detail/'+item.id}"><h4 id="title">{{item.title}}</h4></router-link>
-         <div class="bottom">
-           <div class="item" id="left">
-             <icon name="eye"></icon>
-             <span>{{item.visit_count}}</span>
-           </div>
-           <div class="item">
-             <icon name="comments"></icon>
-             <span>{{item.reply_count>0?item.reply_count:'暂无评论'}}</span>
-           </div>
-           <div class="item">
-             <icon name="clock-o"></icon>
-             <span>21分钟前</span>
-           </div>
-         </div>
-      </div>
+        <load-ding></load-ding>
+
+
+        <scroller
+                :on-refresh="_refresh"
+                :on-infinite="_infinite"
+
+        >
+                 <div class="contentBox">
+                     <div v-for="item in data" class="itemBox">
+                         <span v-show="item.top" class="itemtop">置顶</span>
+                         <span v-show="item.good" class="essence">精华</span>
+                         <div class="top">
+                             <div class="imgBox">
+                                 <router-link :to="{path:'/home'}">
+                                     <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
+                                 </router-link>
+                             </div>
+                             <div class="infoBox">
+                                 <p class="author">{{item.author.loginname}}</p>
+                                 <p class="activeInfo"><span class="activeTime">1分钟前</span><span class="type">#{{item.tab}}#</span></p>
+                             </div>
+                         </div>
+                         <router-link class="href" :to="{path:'/detail/'+item.id}"><h4 id="title">{{item.title}}</h4></router-link>
+                         <div class="bottom">
+                             <div class="item" id="left">
+                                 <icon name="eye"></icon>
+                                 <span>{{item.visit_count}}</span>
+                             </div>
+                             <div class="item">
+                                 <icon name="comments"></icon>
+                                 <span>{{item.reply_count>0?item.reply_count:'暂无评论'}}</span>
+                             </div>
+                             <div class="item">
+                                 <icon name="clock-o"></icon>
+                                 <span>21分钟前</span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+        </scroller>
 
 
 
@@ -42,18 +53,49 @@
 </template>
 
 <script>
+    import loadDing from '../loadding.vue'
     export default {
         name: 'chapterList',
         props:['data']
       ,
+        components:{
+            loadDing
+        },
         data() {
-            return {}
+            return {
+
+            }
+        },
+        methods: {
+            _refresh:function(done){
+                setTimeout(function (){
+                    done();
+                },2000)
+
+            },
+            _infinite:function(done){
+                setTimeout(function (){
+                    console.log('xxx');
+                    done();
+                },2000)
+            },
+            _getData(type,pageCount){
+                    let tempData = this.data;
+                   this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit='+pageCount*10+'&mdrender=false').
+                    then((response)=>{
+                       this.data = response.data.data;
+                   }).
+                   catch((error)=>{
+                       console.log('获取下拉数据加载失败！');
+                   });
+            }
+
         }
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
   *{
     padding:0px;
     margin:0px;
@@ -61,7 +103,7 @@
 
   .list{
     width:100%;
-    margin-bottom: 40px;
+    margin-bottom: -80px;
     overflow: auto;
     position:absolute;
     top:40px;
@@ -81,8 +123,6 @@
   .top{
     width:100%;
     height:45px;
-
-
     padding-top: 10px;
     padding-bottom: 5px;
 
@@ -191,7 +231,9 @@
     text-decoration: none;
     color:black;
   }
-
+.contentBox{
+    /*background:red;*/
+}
 
 
 </style>
