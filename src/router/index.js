@@ -5,6 +5,7 @@ import Send from '@/components/send/send'
 import User from '@/components/user/user'
 import Message from '@/components/message/message'
 import Detail from '@/components/detail/detail'
+import About from '@/components/about/about'
 
 Vue.use(Router)
 
@@ -43,6 +44,12 @@ export default new Router({
       component:Detail
 
     },
+      {
+          path:'/about/',
+          name:'about',
+          component:About
+
+      },
   ],
   linkActiveClass: 'active'
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <load-ding></load-ding>
+        <load-ding v-show="this.isShowLoadding"></load-ding>
 
 
         <scroller
@@ -63,8 +63,11 @@
         },
         data() {
             return {
-
+                 isShowLoadding:true,
             }
+        },
+        mounted:function(){
+          this.isShowLoadding = false;
         },
         methods: {
             _refresh:function(done){
