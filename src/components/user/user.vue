@@ -3,7 +3,7 @@
        <div class="header">
            <div class="header">
                <span class="text">个人中心</span>
-               <icon name="power-off" class="loginout"></icon>
+               <span class="loginout" @click="this.loginOut" v-show="userData.loginname?true:false"><icon name="power-off" class="loginout" ></icon></span>
            </div>
        </div>
        <div class="userInfo">
@@ -12,8 +12,8 @@
                <div class="filter"></div>
            </div>
            <div class="userImg">
-               <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3829152438,436036162&fm=27&gp=0.jpg" alt="">
-               <p class="userName">maliaoMJ</p>
+               <img :src="userData.avatar_url" alt="">
+               <p class="userName">{{userData.loginname?userData.loginname:'用户未登录'}}&nbsp;<router-link v-show="userData.loginname?false:true" :to="{path:'/login'}">登录</router-link></p>
            </div>
        </div>
         <div class="menu">
@@ -40,7 +40,27 @@
     export default {
         name: 'user',
         data() {
-            return {}
+            return {
+                userData:null,
+            }
+        },
+        methods:{
+            login (){
+                this.$http.post('https://cnodejs.org/api/v1/accesstoken',{accesstoken:'fd693dd6-276f-42ee-b374-0ddde37c9157'}).then(
+                    (response)=>{
+                        console.log(response);
+                        this.userData = response.data;
+                    }
+                ).catch((error)=>{
+                    console.log("don't found your username");
+                });
+            },
+            loginOut(){
+                alert("退出登录");
+            }
+        },
+        mounted(){
+            this.login();
         }
     }
 </script>

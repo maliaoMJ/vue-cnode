@@ -12,7 +12,7 @@
           <p>发表</p>
         </div>
       </router-link>
-      <router-link :to="{path:'/message'}" :class="[tabName==='message'?'item_active':'','item']">
+      <router-link :to="{path:'/message/hasread'}" :class="[tabName==='message'?'item_active':'','item']">
         <div class="message">
           <icon name="envelope-o"></icon>
 

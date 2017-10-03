@@ -14,7 +14,7 @@
                          <span v-show="item.good" class="essence">精华</span>
                          <div class="top">
                              <div class="imgBox">
-                                 <router-link :to="{path:'/home'}">
+                                 <router-link :to="{path:'/userdetail/'+item.author_id}">
                                      <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
                                  </router-link>
                              </div>
@@ -68,6 +68,7 @@
         },
         mounted:function(){
           this.isShowLoadding = false;
+
         },
         methods: {
             _refresh:function(done){

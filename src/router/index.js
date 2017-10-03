@@ -6,6 +6,8 @@ import User from '@/components/user/user'
 import Message from '@/components/message/message'
 import Detail from '@/components/detail/detail'
 import About from '@/components/about/about'
+import UserDetail from '@/components/userdetail/userdetail'
+import Login from '@/components/login/login'
 
 Vue.use(Router)
 
@@ -27,7 +29,7 @@ export default new Router({
       component:Send
     },
     {
-      path:'/message',
+      path:'/message/:type',
       name:'message',
       component:Message
 
@@ -48,6 +50,18 @@ export default new Router({
           path:'/about/',
           name:'about',
           component:About
+
+      },
+      {
+          path:'/userdetail/:id',
+          name:'userdetail',
+          component:UserDetail
+
+      },
+      {
+          path:'/login/',
+          name:'login',
+          component:Login
 
       },
   ],
