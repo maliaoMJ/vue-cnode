@@ -3,18 +3,18 @@
         <load-ding v-show="this.isShowLoadding"></load-ding>
 
 
-        <scroller
+     <!--    <scroller
                 :on-refresh="_refresh"
                 :on-infinite="_infinite"
 
-        >
+        > -->
                  <div class="contentBox">
                      <div v-for="item in data" class="itemBox">
                          <span v-show="item.top" class="itemtop">置顶</span>
                          <span v-show="item.good" class="essence">精华</span>
                          <div class="top">
                              <div class="imgBox">
-                                 <router-link :to="{path:'/userdetail/'+item.author_id}">
+                                 <router-link :to="{path:'/userdetail/'+item.author.loginname}">
                                      <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
                                  </router-link>
                              </div>
@@ -40,7 +40,7 @@
                          </div>
                      </div>
                  </div>
-        </scroller>
+       <!--  </scroller> -->
 
 
 
@@ -68,7 +68,6 @@
         },
         mounted:function(){
           this.isShowLoadding = false;
-
         },
         methods: {
             _refresh:function(done){
@@ -88,6 +87,7 @@
                    this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit='+pageCount*10+'&mdrender=false').
                     then((response)=>{
                        this.data = response.data.data;
+
                    }).
                    catch((error)=>{
                        console.log('获取下拉数据加载失败！');

@@ -3,7 +3,7 @@
        <div class="header">
            <div class="header">
                <span class="text">个人中心</span>
-               <span class="loginout" @click="this.loginOut" v-show="userData.loginname?true:false"><icon name="power-off" class="loginout" ></icon></span>
+               <span class="loginout" @click="this.loginOut" v-show="isLogin?true:false"><icon name="power-off" class="loginout" ></icon></span>
            </div>
        </div>
        <div class="userInfo">
@@ -12,8 +12,8 @@
                <div class="filter"></div>
            </div>
            <div class="userImg">
-               <img :src="userData.avatar_url" alt="">
-               <p class="userName">{{userData.loginname?userData.loginname:'用户未登录'}}&nbsp;<router-link v-show="userData.loginname?false:true" :to="{path:'/login'}">登录</router-link></p>
+               <img :src="isLogin?userData.avatar_url:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=73823530,1601728755&fm=27&gp=0.jpg'" alt="">
+               <p class="userName">{{isLogin?userData.loginname:'用户未登录'}}&nbsp;<router-link v-show="isLogin?false:true" :to="{path:'/login'}">登录</router-link></p>
            </div>
        </div>
         <div class="menu">
@@ -22,7 +22,7 @@
                    <icon name="send" class="icons"></icon> <span class="text">发表文章</span><icon class="right" name="chevron-right"></icon>
                 </div>
             </router-link>
-            <router-link :to="{path:'/message'}">
+            <router-link :to="{path:'/message/hasread'}">
                 <div class="item">
                     <icon id="message" name="envelope-o" class="icons"></icon> <span class="text">我的消息</span><icon class="right" name="chevron-right"></icon>
                 </div>
@@ -41,26 +41,37 @@
         name: 'user',
         data() {
             return {
-                userData:null,
+            isUserLogin:false,
+            userDataInfo:null,
             }
         },
+        computed:{
+           userData(){
+             return this.$store.getters.getUserData
+           },
+           isLogin(){
+              return this.$store.getters.getLoginState
+           }
+        },
         methods:{
-            login (){
-                this.$http.post('https://cnodejs.org/api/v1/accesstoken',{accesstoken:'fd693dd6-276f-42ee-b374-0ddde37c9157'}).then(
-                    (response)=>{
-                        console.log(response);
-                        this.userData = response.data;
-                    }
-                ).catch((error)=>{
-                    console.log("don't found your username");
-                });
+            getData(){
+              //1.获取用户登录状态
+              this.isUserLogin = this.$store.getters.getLoginState;
+              this.userDataInfo = this.$store.getters.getUserData;
             },
             loginOut(){
-                alert("退出登录");
+                //退出登录
+                //1.设置用户登录状态 为false
+                //2.清空登录用户的数据
+                this.$store.commit('setLoginState',false);
+                this.$store.commit('setAccessToken','');
+                this.$store.commit('setUserData',null);
             }
         },
         mounted(){
-            this.login();
+
+            //初始化数据
+            this.getData();
         }
     }
 </script>
@@ -91,7 +102,7 @@
     }
     .header>.text{
         font-size: 16px;
-        padding-left: 40px;
+        padding-left: 20px;
         color:rgb(31,31,31);
 
     }

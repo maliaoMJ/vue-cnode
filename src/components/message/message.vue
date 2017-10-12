@@ -16,7 +16,10 @@
             </div>
         </div>
         <div class="messageList">
-
+            <div class="tipMessage" v-show="this.tipShow">
+                <p><icon name="envelope-o" class="icon"></icon></p>
+                <p class="texts">{{tipMessage}}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -27,31 +30,60 @@
         data() {
             return {
                 readActive:true,
+                hasReadMessage:[],
+                hasNoReadMessage:[],
+                tipMessage:'',
+                tipShow:true,
             }
         },
         methods:{
 
             _getMessageData(){
+              
                 this.$http.get('https://cnodejs.org/api/v1/messages?accesstoken=fd693dd6-276f-42ee-b374-0ddde37c9157')
                     .then((response)=>{
                       console.log(response.data);
+                      this.hasReadMessage = response.data.data.has_read_messages;
+                      
+                      this.hasNoReadMessage = response.data.data.hasnot_read_messages;
+
+
                     })
                     .catch((error)=>{
                      console.log('获取用户信息失败！'+error);
                     });
+           
             },
 
             _changeType_read(){
 
                this.readActive=true;
+           
+               if(this.hasReadMessage.length===0){
+                 
+                 this.tipMessage='暂无已读信息！'
+               }
+          
 
             },
             _changeType_noread(){
                 this.readActive=false;
+                if(this.hasNoReadMessage.length===0){
+             
+                 this.tipMessage='暂无未读信息！'
+               }
             }
         },
         mounted(){
             this._getMessageData();
+            if(this.hasReadMessage.length===0){
+                 
+                 this.tipMessage='暂无已读信息！';
+                 this.tipShow = true;
+               }else{
+                //有已读信息TODO
+                this.tipShow = false;
+               }
         }
 
     }
@@ -106,16 +138,44 @@
         color:darkgray;
     }
     .tab .tab_active_hasRead{
-        background:greenyellow;
-        color:white;
+        background:#040800;
+
+       
     }
     .tab .tab_active_noRead{
-        background: #ff5b6a;
-        color:white;
+        background:#040800;
+     
     }
     .messageList{
         width:100%;
         height:200px;
-        background:red;
+      
+
+    }
+    .tipMessage{
+        width: 100%;
+        height: 150px;
+        background: #eee;
+        text-align: center;
+        padding-top: 50px;
+     
+
+    }
+    .tipMessage>p>.icon{
+        display: block;
+        width: 60px;
+        height: 60px;
+        color: gray;
+        position: absolute;
+        top: 180px;
+        left: 50%;
+        margin-left: -30px;
+
+
+    }
+    .tipMessage>.texts{
+     
+        font-size: 14px;
+        
     }
 </style>

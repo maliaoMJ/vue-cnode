@@ -34,7 +34,7 @@
         methods:{
 
         },
-        beforeCreate:function(){
+        mounted(){
 
             this.$http.get('https://cnodejs.org/api/v1/topic/'+this.$route.params.chapterId)
                 .then((response)=>{

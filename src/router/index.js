@@ -53,7 +53,7 @@ export default new Router({
 
       },
       {
-          path:'/userdetail/:id',
+          path:'/userdetail/:loginname',
           name:'userdetail',
           component:UserDetail
 

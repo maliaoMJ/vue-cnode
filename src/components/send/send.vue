@@ -5,16 +5,16 @@
            <!--<icon name="send" class="sendIcon"></icon>-->
        </div>
         <div class="form">
-            <input type="text" placeholder="标题" class="title">
-            <select name="type" id="type" class="type">
-                <option value="category">----请选择文章分类----</option>
+            <input type="text" placeholder="标题" class="title" v-model='title'>
+            <select name="type" id="type" class="type" v-model='type'>
+                <option value="noselect">----请选择文章分类----</option>
                 <option value="share">分享</option>
                 <option value="ask">问答</option>
                 <option value="job">招聘</option>
                 <option value="dev">测试 </option>
             </select>
-            <textarea class="content" name="" placeholder="文章内容(部分支持markdown语法)" id="content" ></textarea>
-            <div class="btn">提交&nbsp; <icon name="send"></icon></div>
+            <textarea class="content" name="" v-model='content' placeholder="文章内容(部分支持markdown语法)" id="content" ></textarea>
+            <div class="btn" @click.prevent.stop="send">提交&nbsp; <icon name="send"></icon></div>
         </div>
     </div>
 </template>
@@ -23,7 +23,57 @@
     export default {
         name: 'send',
         data() {
-            return {}
+            return {
+                title:'',
+                content:'',
+                type:'noselect',
+
+            }
+        },
+        methods:{
+            //提交
+            send(){
+              //内容检测
+              //xss 做字符串处理略
+                if(this.title!=''&&this.type!='noselect'&&this.content != ''){
+                    //字符串检验合法TODO
+                    //检查用户是否登录
+                    if(this.$store.getters.getLoginState){
+                      //向后台发起数据
+                      
+                       this.$http.post('https://cnodejs.org/api/v1/topics',{ 
+                        accesstoken:this.$store.getters.getAccessToken,
+                            title:this.title,
+                            tab:this.type,
+                            content:this.content
+                        }
+                        ).then(response=>{
+                         //success callback
+                         if(response.data.success){
+                           alert('发表成功！');
+                           //跳转到发表的文章详情页
+                           this.$router.push({path:'/detail/'+response.data.topic_id});
+                         }
+                        
+                       }).catch(error=>{
+                        console.log('发表文章失败!'+error);
+                       });
+
+
+                    }else{
+                        alert('发表文章，请先登录！');
+                        //跳转到登录页
+                        this.$router.push({path:'/login'});
+                    }
+                    
+                 }else{
+                    //字符串不合法TODO
+                    alert('‘选项不能为空 TODO’');
+                 }
+            },
+         
+             
+            
         }
     }
 </script>

@@ -8,6 +8,7 @@ import Icon from 'vue-awesome/components/Icon'
 import VueResource from 'vue-resource'
 import 'github-markdown-css'
 import VueScroller from 'vue-scroller'
+import {store} from './store/store'
 Vue.use(VueScroller)
 Vue.use(VueResource)
 Vue.config.productionTip = false
@@ -17,7 +18,7 @@ Vue.component('icon', Icon)
 new Vue({
   el: '#app',
   router,
-
+  store,
   template: '<App/>',
   components: {
     App,Icon
