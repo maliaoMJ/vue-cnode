@@ -12,7 +12,7 @@
                      <div v-for="item in data" class="itemBox">
                          <span v-show="item.top" class="itemtop">置顶</span>
                          <span v-show="item.good" class="essence">精华</span>
-                         <div class="top">
+                         <div class="top outer">
                              <div class="imgBox">
                                  <router-link :to="{path:'/userdetail/'+item.author.loginname}">
                                      <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
@@ -22,6 +22,7 @@
                                  <p class="author">{{item.author.loginname}}</p>
                                  <p class="activeInfo"><span class="activeTime">1分钟前</span><span class="type">#{{item.tab}}#</span></p>
                              </div>
+                             <div class="clear"></div>
                          </div>
                          <router-link class="href" :to="{path:'/detail/'+item.id}"><h4 id="title">{{item.title}}</h4></router-link>
                          <div class="bottom">
@@ -37,6 +38,7 @@
                                  <icon name="clock-o"></icon>
                                  <span>21分钟前</span>
                              </div>
+                             <div class="clear"></div>
                          </div>
                      </div>
                  </div>
@@ -238,6 +240,20 @@
 .contentBox{
     /*background:red;*/
 }
-
+.clear{
+   clear:both; 
+   height: 0; 
+   height: 0; 
+   overflow:hidden;
+}
+.outer {zoom:1;}   
+.outer:after {
+   clear:both;
+   content:'.';
+   display:block;
+   width: 0;
+   height: 0;
+   visibility:hidden;
+}
 
 </style>

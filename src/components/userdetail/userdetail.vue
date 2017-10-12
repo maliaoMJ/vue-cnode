@@ -1,9 +1,11 @@
 <template>
     <div class="userdetail">
       <div class="header">
-           <div class="header">
+               <div @click="goBack($event)">
+                  <icon class="left" name="arrow-left"></icon>
+              </div>
                <span class="text">用户详情</span>
-           </div>
+        
        </div>
        <div class="userInfo">
            <div class="bgImg">
@@ -22,7 +24,14 @@
            </div> 
        </div>
        <div class="userReccentTopic">
-           <chapter-list></chapter-list>
+           <div class="joinTopic">
+             <p>近期参与过的话题</p>
+           </div>
+           <chapter-list :data="recentRepliesData"></chapter-list>
+           <div class="joinTopic">
+             <p>近期参与过的话题</p>
+           </div>
+           <chapter-list :data="recentRepliesData"></chapter-list>
        </div>
 
     </div>
@@ -36,6 +45,8 @@
             return {
                 userInfo:null,
                 recentReplies:[],
+                recentRepliesData:[],
+          
 
             }
         },
@@ -47,36 +58,39 @@
 
         },
         methods:{
+          goBack(event){
+
+              this.$router.go(-1);
+            },
          getTopicDetail(chapterId){
          //通过文章ID获取文章详情
+            
              this.$http.get('https://cnodejs.org/api/v1/topic/'+chapterId)
                 .then((response)=>{
-                    this.chapterdata = response.data.data;
+
+                 this.recentRepliesData.push(response.data.data);                
                 })
                 .catch((err)=>{
                     console.log('获取文章内容失败！');
                 })
-
-
-
-
+               
          },
          getUserData(){
           this.$http.get('https://cnodejs.org/api/v1/user/'+this.$route.params.loginname)
           .then(response=>{
-          
+           
             if(response.data.success){
                //获取用户详情成功TODO
                this.userInfo = response.data.data;
                this.recentReplies = this.userInfo.recent_replies;
-               console.log(this.recentReplies);
+               for(let i=0;i<this.recentReplies.length;i++){
+                this.getTopicDetail(this.recentReplies[i].id);
 
-
-
-
+               }
+               console.log(this.recentRepliesData);
+               
             }
-          })
-          .catch(error=>{
+          }).catch(error=>{
             console.log('获取用户详情失败！');
           });
          }
@@ -112,9 +126,18 @@
         box-sizing: border-box;
 
     }
+    .left{
+      display:block;
+      float: left;
+      height: 40px;
+        line-height: 40px;
+      font-size: 16px;
+      padding-left: 15px;
+      color: rgb(110,110,110);
+    }
     .header>.text{
         font-size: 16px;
-        padding-left: 20px;
+  
         color:rgb(31,31,31);
 
     }
@@ -196,12 +219,176 @@
         color:rgb(117,193,26);
     }
     .userReccentTopic{
+      display: block;
       width: 100%;
-      height: 200px;
-      background: red;
-      position: absolute;
+      height: auto;
+  
+      position: relative;
       top: 320px;
     }
+   .userReccentTopic .list{
+    width:100%;
+    height: auto;
+    overflow: auto;
+    position: relative;
+    top: 0px;
+    left:0px;
+    margin-bottom: 40px;
+    z-index: 100;
+  
+    
+  }
+ .userReccentTopic .itemBox{
+    width:100%;
+    height:130px;
+    background:white;
+   
+    position:relative;
+
+
+
+  }
+ .userReccentTopic .top{
+    width:100%;
+    height:45px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+
+  }
+
+.userReccentTopic  .imgBox{
+    display: block;
+    float: left;
+    width:40px;
+    height:40px;
+    padding-left:15px;
+    padding-right: 15px;
+
+  }
+.userReccentTopic  .imgBox img{
+    width:40px;
+    height:40px;
+    border-radius: 20px;
+  }
+ .userReccentTopic .infoBox{
+    display: block;
+    float:left;
+  }
+.userReccentTopic  .author{
+    font-size:14px;
+  }
+.userReccentTopic  .activeInfo{
+    padding-top: 3px;
+  }
+ .userReccentTopic .activeInfo>.activeTime{
+    color:gray;
+    padding-right: 5px;
+  }
+ .userReccentTopic .activeInfo>.type{
+    color:rgb(137,196,34);
+  }
+.userReccentTopic  h4{
+    padding-top:5px;
+    font-size:14px;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(237,237,237);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+  }
+.userReccentTopic  .bottom{
+    width:100%;
+    height:30px;
+    padding-top: 5px;
+    border-bottom: 1px rgb(237,237,237) solid;
+    font-size:10px;
+
+
+  }
+.userReccentTopic  .bottom>.item{
+    display: block;
+    float: left;
+    width:33%;
+    font-size:10px;
+
+    border-left: 1px solid rgb(237,237,237);
+
+  }
+.userReccentTopic  .bottom #left{
+    border:none;
+  }
+
+.userReccentTopic  .bottom>.item>span {
+    display: inline-block;
+    vertical-align: top;
+    font-size:10px;
+
+  }
+.userReccentTopic  .itemtop{
+    display: block;
+    width:80px;
+    height:30px;
+    border:2px  rgb(137,196,34) solid ;
+    text-align: center;
+    line-height: 30px;
+    position:absolute;
+    right: 10px;
+    top:55px;
+    transform: rotate(55deg);
+    font-size: 14px;
+    color:rgb(137,196,34)!important;
+
+  }
+.userReccentTopic  .essence{
+    display: block;
+    width:80px;
+    height:30px;
+    border:2px rgb(255, 52, 14) solid ;
+    text-align: center;
+    line-height: 30px;
+    position:absolute;
+    right: 70px;
+    top:60px;
+    transform: rotate(55deg);
+    font-size: 14px;
+    color:rgb(255, 52, 14)!important;
+  }
+.userReccentTopic  .href{
+    text-decoration: none;
+    color:black;
+  }
+.contentBox{
+    /*background:red;*/
+    position: relative;
+    height: auto;
+    overflow: hidden;
+
+}
+.outer {
+  zoom:1;
+}   
+.outer::after {
+   clear:both;
+   content:'.';
+   display:block;
+   width: 0;
+   height: 0;
+   visibility:hidden;
+}
+.joinTopic{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  color: gray;
+
+  background: #eee;
+}
+.joinTopic>p{
+  font-size: 16px;
+  padding-left: 20px;
+}
 
 
 </style>
