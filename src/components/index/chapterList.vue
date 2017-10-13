@@ -3,11 +3,7 @@
         <load-ding v-show="this.isShowLoadding"></load-ding>
 
 
-     <!--    <scroller
-                :on-refresh="_refresh"
-                :on-infinite="_infinite"
-
-        > -->
+        <div class="wrapper"  ref="wrapper">
                  <div class="contentBox">
                      <div v-for="item in data" class="itemBox">
                          <span v-show="item.top" class="itemtop">置顶</span>
@@ -42,11 +38,10 @@
                          </div>
                      </div>
                  </div>
-       <!--  </scroller> -->
+                 <div class="mores"></div>
 
 
-
-
+       </div>
     </div>
 
 
@@ -56,6 +51,7 @@
 
 <script>
     import loadDing from '../loadding.vue'
+    import BScroll from 'better-scroll'
     export default {
         name: 'chapterList',
         props:['data']
@@ -70,7 +66,19 @@
         },
         mounted:function(){
           this.isShowLoadding = false;
+        
+          this.$nextTick(()=>{
+            let scroll = new BScroll(this.$refs.wrapper,{
+               scrollY: true,
+               click: true,
+               bounce:true,
+            })
+          });
+        
         },
+        created(){
+           
+          },
         methods: {
             _refresh:function(done){
                 setTimeout(function (){
@@ -106,16 +114,29 @@
     padding:0px;
     margin:0px;
   }
-
+   
   .list{
     width:100%;
-    margin-bottom: -80px;
+ 
     overflow: auto;
     position:absolute;
     top:40px;
     left:0px;
-    bottom:-38px;
+    bottom: 80px;
+    margin-bottom: -80px;
+    height: auto;
     z-index: 100;
+  }
+  .contentBox{
+
+      position: relative;
+      height: auto;
+      overflow: auto;
+  }
+  .wrapper{
+        position: relative;
+        height: auto;
+        overflow: auto;
   }
   .itemBox{
     width:100%;
@@ -237,9 +258,8 @@
     text-decoration: none;
     color:black;
   }
-.contentBox{
-    /*background:red;*/
-}
+
+
 .clear{
    clear:both; 
    height: 0; 

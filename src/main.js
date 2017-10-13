@@ -9,6 +9,7 @@ import VueResource from 'vue-resource'
 import 'github-markdown-css'
 import VueScroller from 'vue-scroller'
 import {store} from './store/store'
+import BScroll from 'better-scroll'
 Vue.use(VueScroller)
 Vue.use(VueResource)
 Vue.config.productionTip = false

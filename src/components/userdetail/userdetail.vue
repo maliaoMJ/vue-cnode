@@ -29,9 +29,9 @@
            </div>
            <chapter-list :data="recentRepliesData"></chapter-list>
            <div class="joinTopic">
-             <p>近期参与过的话题</p>
+             <p>近期创建过的话题</p>
            </div>
-           <chapter-list :data="recentRepliesData"></chapter-list>
+           <chapter-list :data="recentTopicsData"></chapter-list>
        </div>
 
     </div>
@@ -46,8 +46,8 @@
                 userInfo:null,
                 recentReplies:[],
                 recentRepliesData:[],
-          
-
+                recentTopics:[],
+                recentTopicsData:[],    
             }
         },
         components:{
@@ -62,13 +62,17 @@
 
               this.$router.go(-1);
             },
-         getTopicDetail(chapterId){
-         //通过文章ID获取文章详情
+         getTopicDetail(type,chapterId){
+         //通过文章ID和数据type获取文章详情
             
              this.$http.get('https://cnodejs.org/api/v1/topic/'+chapterId)
                 .then((response)=>{
 
-                 this.recentRepliesData.push(response.data.data);                
+                 if(type==='repay'){
+                  this.recentRepliesData.push(response.data.data);
+                 }else{
+                  this.recentTopicsData.push(response.data.data);
+                 }               
                 })
                 .catch((err)=>{
                     console.log('获取文章内容失败！');
@@ -82,12 +86,14 @@
             if(response.data.success){
                //获取用户详情成功TODO
                this.userInfo = response.data.data;
+               this.recentTopics = this.userInfo.recent_topics;
                this.recentReplies = this.userInfo.recent_replies;
                for(let i=0;i<this.recentReplies.length;i++){
-                this.getTopicDetail(this.recentReplies[i].id);
-
+                this.getTopicDetail('repay',this.recentReplies[i].id);
                }
-               console.log(this.recentRepliesData);
+               for(let i=0;i<this.recentTopics.length;i++){
+                this.getTopicDetail('create',this.recentTopics[i].id);
+               }
                
             }
           }).catch(error=>{
