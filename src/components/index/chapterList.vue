@@ -7,6 +7,7 @@
                           :on-refresh="_refresh"
                           :on-infinite="_infinite" 
                           v-show='show_infinite'
+                          ref="scroller"
 
 
                   >
@@ -37,7 +38,7 @@
                                </div>
                                <div class="item">
                                    <icon name="clock-o"></icon>
-                                   <span>21分钟前</span>
+                                   <span>{{item.last_reply_at | getTimeInfos}}</span>
                                </div>
                                <div class="clear"></div>
                            </div>
@@ -62,7 +63,8 @@
         data() {
             return {
                  isShowLoadding:true,
-                 show_infinite:true
+                 show_infinite:true,
+
             }
         },
         mounted(){
@@ -71,6 +73,34 @@
         
  
         
+        },
+        filters: {
+//            可以抽出来做成通用的
+            getTimeInfos(str) {
+                if (!str) {
+                    return ''
+                }
+                const date = new Date(str);
+                const time = new Date().getTime() - date.getTime(); //现在的时间-传入的时间 = 相差的时间（单位 = 毫秒）
+                if (time < 0) {
+                    return '';//我也想这件事可能发生
+                } else if (time / 1000 < 60) {
+                    return '刚刚';
+                } else if ((time / 60000) < 60) {
+                    return parseInt((time / 60000)) + '分钟前';
+                } else if ((time / 3600000) < 24) {
+                    return parseInt(time / 3600000) + '小时前';
+                } else if ((time / 86400000) < 31) {
+                    return parseInt(time / 86400000) + '天前';
+                } else if ((time / 2592000000) < 12) {
+                    return parseInt(time / 2592000000) + '月前';
+                } else {
+                    return parseInt(time / 31536000000) + '年前';
+                }
+            }
+        },
+        computed:{
+
         },
         created(){
            
@@ -82,20 +112,25 @@
                 },2000)
 
             },
-            onScroll:function(e, position){
-              this.position = position;
-            },
+
             _infinite:function(done){
-                setTimeout(function (){
-                    console.log('xxx');
+                //获取VM
+                this.$nextTick(()=>{
+
+                    let scroll = this.$refs.scroller;
+                    let Pleft =scroll.getPosition().left-0;
+                    let Ptop = scroll.getPosition().top-0;
+
                     done();
-                },2000)
+
+                })
             },
             _getData(type,pageCount){
-                    let tempData = this.data;
+
                    this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit='+pageCount*10+'&mdrender=false').
                     then((response)=>{
-                       this.data = response.data.data;
+
+                       this.isShowLoadding = false;
 
                    }).
                    catch((error)=>{

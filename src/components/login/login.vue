@@ -38,7 +38,7 @@
               this.$router.go(-1);
             },
             login(){
-             // fd693dd6-276f-42ee-b374-0ddde37c9157
+
              this.$http.post('https://cnodejs.org/api/v1/accesstoken',{accesstoken:this.userAccessToken}).then(
                     (response)=>{        
                         //登录成功后所得的操作

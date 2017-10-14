@@ -26,7 +26,7 @@
         },
         methods: {
           getData(type = 'all') {
-            this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit=20&mdrender=false')
+            this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit=30&mdrender=false')
               .then((response) => {
                  let data= JSON.stringify(response.data);
                  this.$emit('changeData',data);
