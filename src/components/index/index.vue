@@ -1,7 +1,7 @@
 <template>
     <div class="home">
       <index-header @changeData="renderList"></index-header>
-      <chapter-list :data="this.result"></chapter-list>
+      <chapter-list :data="this.result" :showInfinite="show_infinite"></chapter-list>
     </div>
 </template>
 
@@ -23,7 +23,8 @@
       },
       data() {
         return {
-           resultData:null
+           resultData:null,
+           show_infinite:true,
         }
       },
       methods:{

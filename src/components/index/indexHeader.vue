@@ -5,7 +5,7 @@
       <router-link :to="{path:'/home/ask'}" :class="[this.typeName==='ask'?'item_active':'','item']"><span @click="changeType($event,'ask')">问答</span></router-link>
       <router-link :to="{path:'/home/job'}" :class="[this.typeName==='job'?'item_active':'','item']"><span @click="changeType($event,'job')">招聘</span></router-link>
       <router-link :to="{path:'/home/dev'}" :class="[this.typeName==='dev'?'item_active':'','item']"><span @click="changeType($event,'dev')">测试</span></router-link>
-
+      <div></div>
     </div>
 </template>
 
@@ -26,7 +26,7 @@
         },
         methods: {
           getData(type = 'all') {
-            this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit=10&mdrender=false')
+            this.$http.get('https://cnodejs.org/api/v1/topics?tab=' + type + '&page=1&limit=20&mdrender=false')
               .then((response) => {
                  let data= JSON.stringify(response.data);
                  this.$emit('changeData',data);

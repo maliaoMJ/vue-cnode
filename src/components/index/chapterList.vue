@@ -1,60 +1,60 @@
 <template>
     <div class="list">
         <load-ding v-show="this.isShowLoadding"></load-ding>
+                   <div class="contentBox">
+                       <scroller
+                          class="wrapper" 
+                          :on-refresh="_refresh"
+                          :on-infinite="_infinite" 
+                          v-show='show_infinite'
 
 
-        <div class="wrapper"  ref="wrapper">
-                 <div class="contentBox">
-                     <div v-for="item in data" class="itemBox">
-                         <span v-show="item.top" class="itemtop">置顶</span>
-                         <span v-show="item.good" class="essence">精华</span>
-                         <div class="top outer">
-                             <div class="imgBox">
-                                 <router-link :to="{path:'/userdetail/'+item.author.loginname}">
-                                     <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
-                                 </router-link>
-                             </div>
-                             <div class="infoBox">
-                                 <p class="author">{{item.author.loginname}}</p>
-                                 <p class="activeInfo"><span class="activeTime">1分钟前</span><span class="type">#{{item.tab}}#</span></p>
-                             </div>
-                             <div class="clear"></div>
-                         </div>
-                         <router-link class="href" :to="{path:'/detail/'+item.id}"><h4 id="title">{{item.title}}</h4></router-link>
-                         <div class="bottom">
-                             <div class="item" id="left">
-                                 <icon name="eye"></icon>
-                                 <span>{{item.visit_count}}</span>
-                             </div>
-                             <div class="item">
-                                 <icon name="comments"></icon>
-                                 <span>{{item.reply_count>0?item.reply_count:'暂无评论'}}</span>
-                             </div>
-                             <div class="item">
-                                 <icon name="clock-o"></icon>
-                                 <span>21分钟前</span>
-                             </div>
-                             <div class="clear"></div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="mores"></div>
+                  >
+                       <div v-for="item in data" class="itemBox">
+                           <span v-show="item.top" class="itemtop">置顶</span>
+                           <span v-show="item.good" class="essence">精华</span>
+                           <div class="top outer">
+                               <div class="imgBox">
+                                   <router-link :to="{path:'/userdetail/'+item.author.loginname}">
+                                       <img :title="item.author.loginname" :src="item.author.avatar_url" alt="">
+                                   </router-link>
+                               </div>
+                               <div class="infoBox">
+                                   <p class="author">{{item.author.loginname}}</p>
+                                   <p class="activeInfo"><span class="activeTime">1分钟前</span><span class="type">#{{item.tab}}#</span></p>
+                               </div>
+                               <div class="clear"></div>
+                           </div>
+                           <router-link class="href" :to="{path:'/detail/'+item.id}"><h4 id="title">{{item.title}}</h4></router-link>
+                           <div class="bottom">
+                               <div class="item" id="left">
+                                   <icon name="eye"></icon>
+                                   <span>{{item.visit_count}}</span>
+                               </div>
+                               <div class="item">
+                                   <icon name="comments"></icon>
+                                   <span>{{item.reply_count>0?item.reply_count:'暂无评论'}}</span>
+                               </div>
+                               <div class="item">
+                                   <icon name="clock-o"></icon>
+                                   <span>21分钟前</span>
+                               </div>
+                               <div class="clear"></div>
+                           </div>
+                       </div>
 
 
-       </div>
+                       </scroller>
+                   </div>                
     </div>
-
-
-
-
 </template>
 
 <script>
     import loadDing from '../loadding.vue'
-    import BScroll from 'better-scroll'
+
     export default {
         name: 'chapterList',
-        props:['data']
+        props:['data','showInfinite']
       ,
         components:{
             loadDing
@@ -62,18 +62,14 @@
         data() {
             return {
                  isShowLoadding:true,
+                 show_infinite:true
             }
         },
-        mounted:function(){
+        mounted(){
           this.isShowLoadding = false;
+          this.show_infinite = this.showInfinite;
         
-          this.$nextTick(()=>{
-            let scroll = new BScroll(this.$refs.wrapper,{
-               scrollY: true,
-               click: true,
-               bounce:true,
-            })
-          });
+ 
         
         },
         created(){
@@ -85,6 +81,9 @@
                     done();
                 },2000)
 
+            },
+            onScroll:function(e, position){
+              this.position = position;
             },
             _infinite:function(done){
                 setTimeout(function (){
@@ -109,7 +108,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style >
   *{
     padding:0px;
     margin:0px;
@@ -117,35 +116,49 @@
    
   .list{
     width:100%;
- 
-    overflow: auto;
+    
     position:absolute;
     top:40px;
     left:0px;
-    bottom: 80px;
-    margin-bottom: -80px;
-    height: auto;
+    height: 100%;
     z-index: 100;
   }
-  .contentBox{
-
-      position: relative;
-      height: auto;
-      overflow: auto;
-  }
+ 
   .wrapper{
-        position: relative;
-        height: auto;
-        overflow: auto;
+    position: relative;
+    top: 0px;
+    left: 0px;  
+    width: 100%;
+    height: 10%;
+
+        
   }
+ .contentBox{
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+
+    overflow: auto;
+}
   .itemBox{
     width:100%;
     height:130px;
     background:white;
     margin-bottom:20px;
     position:relative;
+   
 
-
+  }
+  .loading-layer{
+    height: 40px;
+  }
+  .itemBox:last-child{
+      width:100%;
+      height:130px;
+      background:red; 
+      position:relative;
   }
   .top{
     width:100%;

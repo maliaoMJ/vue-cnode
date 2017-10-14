@@ -23,15 +23,12 @@
                <p class="createTime"><!-- 突然间不想要时间啦 --> 积分:{{userInfo.score}}</p>
            </div> 
        </div>
+
        <div class="userReccentTopic">
            <div class="joinTopic">
-             <p>近期参与过的话题</p>
-           </div>
-           <chapter-list :data="recentRepliesData"></chapter-list>
-           <div class="joinTopic">
-             <p>近期创建过的话题</p>
-           </div>
-           <chapter-list :data="recentTopicsData"></chapter-list>
+             <p>近期参与和创建的话题</p>
+           </div >
+           <chapter-list :data="totalData" :showInfinite="show_infinite"></chapter-list>
        </div>
 
     </div>
@@ -44,22 +41,21 @@
         data() {
             return {
                 userInfo:null,
+                show_infinite:true,
                 recentReplies:[],
-                recentRepliesData:[],
+              
                 recentTopics:[],
-                recentTopicsData:[],    
+           
+                totalData:[],    
             }
         },
         components:{
          chapterList
         },
         computed:{
-
-
         },
         methods:{
           goBack(event){
-
               this.$router.go(-1);
             },
          getTopicDetail(type,chapterId){
@@ -67,11 +63,10 @@
             
              this.$http.get('https://cnodejs.org/api/v1/topic/'+chapterId)
                 .then((response)=>{
-
                  if(type==='repay'){
-                  this.recentRepliesData.push(response.data.data);
+                  this.totalData.push(response.data.data);
                  }else{
-                  this.recentTopicsData.push(response.data.data);
+                  this.totalData.push(response.data.data);
                  }               
                 })
                 .catch((err)=>{
@@ -102,8 +97,7 @@
          }
         },
         mounted(){
- 
-           this.getUserData();
+           this.getUserData();    
         }
     }
 </script>
@@ -130,7 +124,6 @@
         line-height: 40px;
         border-bottom: 1px solid rgb(228,228,228);
         box-sizing: border-box;
-
     }
     .left{
       display:block;
@@ -145,9 +138,7 @@
         font-size: 16px;
   
         color:rgb(31,31,31);
-
     }
-
     .userInfo{
         position: absolute;
         top:40px;
@@ -157,7 +148,6 @@
         border-bottom: 2px solid rgb(231,231,231);
         box-sizing: border-box;
         background:rgba(37, 37, 37, 0.91);
-
     }
     .userInfo .github{
         padding-top: 8px;
@@ -191,7 +181,6 @@
         height:100%;
         z-index: 222;
         -webkit-filter:blur(2px);
-
     }
     .bgImg>.filter{
       position: absolute;
@@ -211,7 +200,6 @@
         top:85px;
         left:50%;
         margin-left: -50px;
-
     }
     .userImg>img{
         width:100px;
@@ -224,177 +212,39 @@
         font-size: 14px;
         color:rgb(117,193,26);
     }
+
     .userReccentTopic{
-      display: block;
-      width: 100%;
-      height: auto;
-  
-      position: relative;
+      position: absolute;
       top: 320px;
+      width: 100%;
+      height: 100%;
+      
     }
-   .userReccentTopic .list{
-    width:100%;
-    height: auto;
-    overflow: auto;
-    position: relative;
-    top: 0px;
-    left:0px;
-    margin-bottom: 40px;
-    z-index: 100;
-  
-    
-  }
- .userReccentTopic .itemBox{
-    width:100%;
-    height:130px;
-    background:white;
-   
-    position:relative;
-
-
-
-  }
- .userReccentTopic .top{
-    width:100%;
-    height:45px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-
-  }
-
-.userReccentTopic  .imgBox{
-    display: block;
-    float: left;
-    width:40px;
-    height:40px;
-    padding-left:15px;
-    padding-right: 15px;
-
-  }
-.userReccentTopic  .imgBox img{
-    width:40px;
-    height:40px;
-    border-radius: 20px;
-  }
- .userReccentTopic .infoBox{
-    display: block;
-    float:left;
-  }
-.userReccentTopic  .author{
-    font-size:14px;
-  }
-.userReccentTopic  .activeInfo{
-    padding-top: 3px;
-  }
- .userReccentTopic .activeInfo>.activeTime{
-    color:gray;
-    padding-right: 5px;
-  }
- .userReccentTopic .activeInfo>.type{
-    color:rgb(137,196,34);
-  }
-.userReccentTopic  h4{
-    padding-top:5px;
-    font-size:14px;
-    padding-left: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgb(237,237,237);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-  }
-.userReccentTopic  .bottom{
-    width:100%;
-    height:30px;
-    padding-top: 5px;
-    border-bottom: 1px rgb(237,237,237) solid;
-    font-size:10px;
-
-
-  }
-.userReccentTopic  .bottom>.item{
-    display: block;
-    float: left;
-    width:33%;
-    font-size:10px;
-
-    border-left: 1px solid rgb(237,237,237);
-
-  }
-.userReccentTopic  .bottom #left{
-    border:none;
-  }
-
-.userReccentTopic  .bottom>.item>span {
-    display: inline-block;
-    vertical-align: top;
-    font-size:10px;
-
-  }
-.userReccentTopic  .itemtop{
-    display: block;
-    width:80px;
-    height:30px;
-    border:2px  rgb(137,196,34) solid ;
-    text-align: center;
-    line-height: 30px;
-    position:absolute;
-    right: 10px;
-    top:55px;
-    transform: rotate(55deg);
-    font-size: 14px;
-    color:rgb(137,196,34)!important;
-
-  }
-.userReccentTopic  .essence{
-    display: block;
-    width:80px;
-    height:30px;
-    border:2px rgb(255, 52, 14) solid ;
-    text-align: center;
-    line-height: 30px;
-    position:absolute;
-    right: 70px;
-    top:60px;
-    transform: rotate(55deg);
-    font-size: 14px;
-    color:rgb(255, 52, 14)!important;
-  }
-.userReccentTopic  .href{
-    text-decoration: none;
-    color:black;
-  }
-.contentBox{
-    /*background:red;*/
-    position: relative;
-    height: auto;
-    overflow: hidden;
-
-}
-.outer {
-  zoom:1;
-}   
-.outer::after {
-   clear:both;
-   content:'.';
-   display:block;
-   width: 0;
-   height: 0;
-   visibility:hidden;
-}
-.joinTopic{
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  color: gray;
-
-  background: #eee;
-}
-.joinTopic>p{
-  font-size: 16px;
-  padding-left: 20px;
-}
-
-
+    .joinTopic{
+      position: absolute;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      color: gray;
+      background: #eee;
+    }
+    .joinTopic>p{
+      font-size: 16px;
+      padding-left: 20px;
+    }
+    .clear{
+       clear:both; 
+       height: 0; 
+       height: 0; 
+       overflow:hidden;
+    }
+    .outer {zoom:1;}   
+    .outer:after {
+       clear:both;
+       content:'.';
+       display:block;
+       width: 0;
+       height: 0;
+       visibility:hidden;
+    }
 </style>
