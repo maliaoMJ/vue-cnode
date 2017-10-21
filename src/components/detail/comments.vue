@@ -134,7 +134,7 @@
                 }else{
 
                     this.$http.post(`https://cnodejs.org/api/v1/reply/${this.userid}/ups`,{accesstoken:this.$store.getters.getAccessToken}).then((response)=>{
-                
+
                         if(response.data.success===true){
                             if(response.data.action==='down'){
                                 alert('取消点赞成功！');
